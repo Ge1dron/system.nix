@@ -124,6 +124,12 @@
     unzip
     clang-tools
     rubyPackages.solargraph
+    (pkgs.writeShellScriptBin "rebuild" "sudo nixos-rebuild switch --flake")
+    (pkgs.writeShellScriptBin "update" ''
+      cd /etc/nixos/
+      nix flake update
+      rebuild
+    '')
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
