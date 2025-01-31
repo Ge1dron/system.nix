@@ -62,15 +62,6 @@
 
   # Enable CUPS to print documents.
   services.printing.enable = false;
-  programs.nix-ld.enable = true;
-  programs.nix-ld.libraries = with pkgs; [
-    clang-tools
-    llvmPackages_latest.lldb 
-    llvmPackages_latest.libllvm 
-    llvmPackages_latest.libcxx 
-    llvmPackages_latest.clang
-    llvmPackages.libcxxStdenv
-  ];
 
   # Enable sound with pipewire.
   hardware.pulseaudio.enable = false;
@@ -116,29 +107,23 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-  neovim
-  telegram-desktop
-  gcc
-  nodejs_20
-  rubyPackages.rails
-  wezterm
-  obsidian
-  scrcpy
-  qpwgraph
-  blender
-  python3Full
-  gnuradio
-  pkgs.rtl-sdr
-  gqrx
-  zip
-  unzip
-  clang-tools
-  llvmPackages_latest.lldb 
-  llvmPackages_latest.libllvm 
-  llvmPackages_latest.libcxx 
-  llvmPackages_latest.clang
-  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #  wget
+    telegram-desktop
+    gcc
+    nodejs_20
+    rubyPackages.rails
+    wezterm
+    obsidian
+    scrcpy
+    qpwgraph
+    blender
+    python3Full
+    gnuradio
+    pkgs.rtl-sdr
+    gqrx
+    zip
+    unzip
+    clang-tools
+    rubyPackages.solargraph
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -151,6 +136,48 @@
     user = {
       name = "leshii";
       email = "shishkov.dimentr@inbox.ru";
+    };
+  };
+
+  programs.nvf = {
+    enable = true;
+
+    settings.vim = {
+      # Цвета
+      theme.enable = true;
+      theme.name = "dracula";
+
+      # Поддержка языков
+      treesitter.enable = true;
+      languages = {
+        enableLSP = true;
+        enableFormat = true;
+        enableExtraDiagnostics = true;
+        enableTreesitter = true;
+    
+        clang.enable = true;
+        ruby.enable = true;
+        nix.enable = true;
+        # все остальные просто название-языка.enable = true;
+      };
+  
+      # Подсказки
+      binds.whichKey.enable = true; # Подсказки по самому виму (при нажатии пробела)
+  
+      autocomplete.nvim-cmp.enable = true; # Подсказки по Ctrl + Space в insert-режиме
+      lsp.mappings = {
+        goToDefinition = "<leader>gd"; # Перейти к определению функции
+        hover = "<leader>k"; # Справка по функции
+        renameSymbol = "<leader>r"; # Переименовать переменную / функцию / модуль
+      };
+  
+      telescope = {
+        enable = true;
+        mappings.buffers = "<leader>b"; # Список открытых файлов (типо вкладок)
+        mappings.findFiles = "<leader>f"; # Поиск по файлам проекта
+        mappings.liveGrep = "<leader>/"; # Поиск по их содержимому
+        mappings.lspReferences = "<leader>gr"; # Перейти к местам использования функции
+      };
     };
   };
 
