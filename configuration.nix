@@ -145,8 +145,7 @@
     settings.vim = {
       # Цвета
       theme.enable = true;
-      theme.name = "catppuccin";
-      theme.style = "latte";
+      theme.name = "dracula";
 
       # Поддержка языков
       treesitter.enable = true;
