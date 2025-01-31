@@ -146,6 +146,7 @@
       # Цвета
       theme.enable = true;
       theme.name = "dracula";
+      options.shiftwidth = 4;
 
       # Поддержка языков
       treesitter.enable = true;
