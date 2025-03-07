@@ -106,19 +106,39 @@
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  environment.systemPackages = with pkgs; [
+    programs.tmux = {
+      enable = true;
+      clock24 = true;
+      shortcut = "a";
+      plugins = with pkgs.tmuxPlugins; [
+            vim-tmux-navigator # CTRL+HJKL для переключения в стороны
+            sensible # делает фигню с кнопкой ESC и чинит цвета
+            dracula # твоя тема
+        ];
+    };
+
+    environment.sessionVariables = {  DOTNET_ROOT = "${pkgs.dotnet-sdk}/share/dotnet";
+};
+
+
+    environment.systemPackages = with pkgs; [
     
     arduino-ide
     arduino-core
-    telegram-desktop  
+
+    telegram-desktop
+
     nodejs_20
     gcc 
     gfortran13
     rubyPackages.rails
+    dotnet-sdk
+
     wezterm
     obsidian
     scrcpy
     qpwgraph
+    vscode
     blender
     python3Full
     gnuradio
