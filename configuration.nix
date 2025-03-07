@@ -107,9 +107,13 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    telegram-desktop
-    gcc
+    
+    arduino-ide
+    arduino-core
+    telegram-desktop  
     nodejs_20
+    gcc 
+    gfortran13
     rubyPackages.rails
     wezterm
     obsidian
@@ -124,14 +128,21 @@
     unzip
     clang-tools
     rubyPackages.solargraph
-    (pkgs.writeShellScriptBin "rebuild" "sudo nixos-rebuild switch --flake")
+    bat
+    masterpdfeditor
+    
+    libreoffice-qt
+    hunspell
+    hunspellDicts.uk_UA
+    hunspellDicts.th_TH
+    
+    (pkgs.writeShellScriptBin "rebuild" "sudo nixos-rebuild switch --flake /etc/nixos")
     (pkgs.writeShellScriptBin "update" ''
       cd /etc/nixos/
       nix flake update
       rebuild
     '')
   ];
-
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   programs.git.enable = true;
