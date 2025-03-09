@@ -120,6 +120,26 @@
     environment.sessionVariables = {  DOTNET_ROOT = "${pkgs.dotnet-sdk}/share/dotnet";
 };
 
+        # Nvidia Configuration 
+         services.xserver.videoDrivers = [ "nvidia" ]; 
+         hardware.graphics.enable = true; 
+    hardware.nvidia.open = true;
+      
+         # Optionally, you may need to select the appropriate driver version for your specific GPU. 
+         hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable;
+    # nvidia-drm.modeset=1 is required for some wayland compositors, e.g. sway 
+         hardware.nvidia.modesetting.enable = true; 
+      
+         hardware.nvidia.prime = { 
+           sync.enable = true; 
+      
+           # Bus ID of the NVIDIA GPU. You can find it using lspci, either under 3D or VGA 
+           nvidiaBusId = "PCI:01:00:0"; 
+      
+           # Bus ID of the Intel GPU. You can find it using lspci, either under 3D or VGA 
+           intelBusId = "PCI:00:02:0"; 
+         };
+
 
     environment.systemPackages = with pkgs; [
     
@@ -165,6 +185,7 @@
   ];
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
+    programs.steam.enable = true;
   programs.git.enable = true;
   programs.git.config = {
     init = {
