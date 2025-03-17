@@ -11,7 +11,10 @@
     ];
 
   # Bootloader.
-  boot.loader.systemd-boot.enable = true;
+  boot.loader.grub.efiSupport = true;
+  boot.loader.grub.enable = true;  
+  boot.loader.grub.device = "nodev";
+  boot.loader.grub.useOSProber = true;
   boot.loader.efi.canTouchEfiVariables = true;
   nix.settings.experimental-features = [ 
     "nix-command" "flakes" 
@@ -160,7 +163,12 @@
     qpwgraph
     vscode
     blender
+    
     python3Full
+    python3
+    python3.pkgs.matplotlib
+    python3.pkgs.numpy
+    
     gnuradio
     pkgs.rtl-sdr
     gqrx
@@ -170,6 +178,7 @@
     rubyPackages.solargraph
     bat
     masterpdfeditor
+    rPackages.Anaconda
     
     libreoffice-qt
     hunspell
