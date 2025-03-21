@@ -65,6 +65,8 @@
 
   # Enable CUPS to print documents.
   services.printing.enable = false;
+  boot.supportedFilesystems = [ "ntfs" ];
+
 
   # Enable sound with pipewire.
   hardware.pulseaudio.enable = false;
