@@ -91,6 +91,7 @@
   users.users.leshii = {
     isNormalUser = true;
     description = "Leshii";
+    initialPassword = "hunter2";
     extraGroups = [ "networkmanager" "wheel" "adbusers" "libvirtd"];
     packages = with pkgs; [
       kdePackages.kate
@@ -154,7 +155,14 @@
     telegram-desktop
 
     nodejs_20
-    gcc 
+
+    gcc        
+      glm
+      libGL
+      libGLU
+      freeglut
+      glew
+      glfw
     gfortran13
     rubyPackages.rails
     dotnet-sdk
