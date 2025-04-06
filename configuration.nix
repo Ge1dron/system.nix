@@ -1,23 +1,25 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-
-{ config, pkgs, ... }:
-
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+  config,
+  pkgs,
+  ...
+}: {
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+  ];
 
   # Bootloader.
   boot.loader.grub.efiSupport = true;
-  boot.loader.grub.enable = true;  
+  boot.loader.grub.enable = true;
   boot.loader.grub.device = "nodev";
   boot.loader.grub.useOSProber = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  nix.settings.experimental-features = [ 
-    "nix-command" "flakes" 
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
   ];
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -65,8 +67,7 @@
 
   # Enable CUPS to print documents.
   services.printing.enable = false;
-  boot.supportedFilesystems = [ "ntfs" ];
-
+  boot.supportedFilesystems = ["ntfs"];
 
   # Enable sound with pipewire.
   hardware.pulseaudio.enable = false;
@@ -92,10 +93,10 @@
     isNormalUser = true;
     description = "Leshii";
     initialPassword = "hunter2";
-    extraGroups = [ "networkmanager" "wheel" "adbusers" "libvirtd"];
+    extraGroups = ["networkmanager" "wheel" "adbusers" "libvirtd"];
     packages = with pkgs; [
       kdePackages.kate
-    #  thunderbird
+      #  thunderbird
     ];
   };
 
@@ -112,43 +113,51 @@
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-    programs.tmux = {
-      enable = true;
-      clock24 = true;
-      shortcut = "a";
-      plugins = with pkgs.tmuxPlugins; [
-            vim-tmux-navigator # CTRL+HJKL для переключения в стороны
-            sensible # делает фигню с кнопкой ESC и чинит цвета
-            dracula # твоя тема
-        ];
-    };
+  programs.tmux = {
+    enable = true;
+    clock24 = true;
+    shortcut = "a";
+    plugins = with pkgs.tmuxPlugins; [
+      vim-tmux-navigator # CTRL+HJKL для переключения в стороны
+      sensible # делает фигню с кнопкой ESC и чинит цвета
+      dracula # твоя тема
+    ];
+  };
 
-    environment.sessionVariables = {  DOTNET_ROOT = "${pkgs.dotnet-sdk}/share/dotnet";
-};
+  environment.sessionVariables = {
+    DOTNET_ROOT = "${pkgs.dotnet-sdk}/share/dotnet";
+  };
 
-        # Nvidia Configuration 
-         services.xserver.videoDrivers = [ "nvidia" ]; 
-         hardware.graphics.enable = true; 
-    hardware.nvidia.open = true;
-      
-         # Optionally, you may need to select the appropriate driver version for your specific GPU. 
-         hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable;
-    # nvidia-drm.modeset=1 is required for some wayland compositors, e.g. sway 
-         hardware.nvidia.modesetting.enable = true; 
-      
-         hardware.nvidia.prime = { 
-           sync.enable = true; 
-      
-           # Bus ID of the NVIDIA GPU. You can find it using lspci, either under 3D or VGA 
-           nvidiaBusId = "PCI:01:00:0"; 
-      
-           # Bus ID of the Intel GPU. You can find it using lspci, either under 3D or VGA 
-           intelBusId = "PCI:00:02:0"; 
-         };
+  # Nvidia Configuration
+  services.xserver.videoDrivers = ["nvidia"];
+  hardware.graphics.enable = true;
+  hardware.nvidia.open = true;
 
+  # Optionally, you may need to select the appropriate driver version for your specific GPU.
+  hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable;
+  # nvidia-drm.modeset=1 is required for some wayland compositors, e.g. sway
+  hardware.nvidia.modesetting.enable = true;
 
-    environment.systemPackages = with pkgs; [
-    
+  hardware.nvidia.prime = {
+    sync.enable = true;
+
+    # Bus ID of the NVIDIA GPU. You can find it using lspci, either under 3D or VGA
+    nvidiaBusId = "PCI:01:00:0";
+
+    # Bus ID of the Intel GPU. You can find it using lspci, either under 3D or VGA
+    intelBusId = "PCI:00:02:0";
+  };
+
+  system.extraDependencies = with pkgs; [
+    glm
+    libGL
+    libGLU
+    freeglut
+    glew
+    glfw
+  ];
+
+  environment.systemPackages = with pkgs; [
     arduino-ide
     arduino-core
 
@@ -156,13 +165,8 @@
 
     nodejs_20
 
-    gcc        
-      glm
-      libGL
-      libGLU
-      freeglut
-      glew
-      glfw
+    gcc
+
     gfortran13
     rubyPackages.rails
     dotnet-sdk
@@ -173,12 +177,12 @@
     qpwgraph
     vscode
     blender
-    
+
     python3Full
     python3
     python3.pkgs.matplotlib
     python3.pkgs.numpy
-    
+
     gnuradio
     pkgs.rtl-sdr
     gqrx
@@ -189,12 +193,12 @@
     bat
     masterpdfeditor
     rPackages.Anaconda
-    
+
     libreoffice-qt
     hunspell
     hunspellDicts.uk_UA
     hunspellDicts.th_TH
-    
+
     (pkgs.writeShellScriptBin "rebuild" "sudo nixos-rebuild switch --flake /etc/nixos")
     (pkgs.writeShellScriptBin "update" ''
       cd /etc/nixos/
@@ -204,12 +208,12 @@
   ];
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
-    programs.steam.enable = true;
+  programs.steam.enable = true;
   programs.git.enable = true;
   programs.git.config = {
     init = {
       defaultBranch = "main";
-      };
+    };
     user = {
       name = "leshii";
       email = "shishkov.dimentr@inbox.ru";
@@ -232,23 +236,23 @@
         enableFormat = true;
         enableExtraDiagnostics = true;
         enableTreesitter = true;
-    
+
         clang.enable = true;
         ruby.enable = true;
         nix.enable = true;
         # все остальные просто название-языка.enable = true;
       };
-  
+
       # Подсказки
       binds.whichKey.enable = true; # Подсказки по самому виму (при нажатии пробела)
-  
+
       autocomplete.nvim-cmp.enable = true; # Подсказки по Ctrl + Space в insert-режиме
       lsp.mappings = {
         goToDefinition = "<leader>gd"; # Перейти к определению функции
         hover = "<leader>k"; # Справка по функции
         renameSymbol = "<leader>r"; # Переименовать переменную / функцию / модуль
       };
-  
+
       telescope = {
         enable = true;
         mappings.buffers = "<leader>b"; # Список открытых файлов (типо вкладок)
@@ -275,11 +279,11 @@
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
-	services.syncthing = {
-	  enable = true;
-	  openDefaultPorts = true;
-	};
-	programs.bash.promptInit = ''PS1="\e[01;32m\u\e[00m@\h: \w\a "'';
+  services.syncthing = {
+    enable = true;
+    openDefaultPorts = true;
+  };
+  programs.bash.promptInit = ''PS1="\e[01;32m\u\e[00m@\h: \w\a "'';
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
@@ -288,5 +292,4 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "24.05"; # Did you read the comment?
-
 }
