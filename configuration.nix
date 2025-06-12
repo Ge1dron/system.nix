@@ -53,17 +53,21 @@
   # You can disable this if you're only using the Wayland session.
   services.xserver.enable = true;
 
+  environment.stub-ld.enable = false;
+
+  programs.nix-ld = {
+    enable = true;
+    libraries = with pkgs; [
+      stdenv.cc.cc.lib
+      zlib
+    ];
+  };
   # Enable the KDE Plasma Desktop Environment.
   services.displayManager.sddm.enable = true;
   services.desktopManager.plasma6.enable = true;
 
   virtualisation.libvirtd.enable = true;
   programs.virt-manager.enable = true;
-  # Configure keymap in X11
-  services.xserver.xkb = {
-    layout = "ru";
-    variant = "";
-  };
 
   # Enable CUPS to print documents.
   services.printing.enable = false;
@@ -101,7 +105,7 @@
   };
 
   # Enable automatic login for the user.
-  services.displayManager.autoLogin.enable = true;
+  services.displayManager.autoLogin.enable = false;
   services.xserver.displayManager.autoLogin.user = "leshii";
 
   # Install firefox.
@@ -124,6 +128,9 @@
     ];
   };
 
+  programs.gamemode.enable = true;
+  programs.steam.gamescopeSession.enable = true;
+
   environment.sessionVariables = {
     DOTNET_ROOT = "${pkgs.dotnet-sdk}/share/dotnet";
   };
@@ -139,8 +146,8 @@
   hardware.nvidia.modesetting.enable = true;
 
   hardware.nvidia.prime = {
-    sync.enable = true;
-
+    offload.enable = true;
+    offload.enableOffloadCmd = true;
     # Bus ID of the NVIDIA GPU. You can find it using lspci, either under 3D or VGA
     nvidiaBusId = "PCI:01:00:0";
 
@@ -164,11 +171,14 @@
     telegram-desktop
 
     nodejs_20
+    gdb
 
     gcc
 
+    nix-ld
+
     gfortran13
-    rubyPackages.rails
+    ruby
     dotnet-sdk
 
     wezterm
@@ -182,6 +192,7 @@
     python3
     python3.pkgs.matplotlib
     python3.pkgs.numpy
+    python3.pkgs.networkx
 
     gnuradio
     pkgs.rtl-sdr
