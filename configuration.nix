@@ -54,7 +54,7 @@
   services.xserver.enable = true;
 
   environment.stub-ld.enable = false;
-
+  
   programs.nix-ld = {
     enable = true;
     libraries = with pkgs; [
@@ -139,6 +139,12 @@
   services.xserver.videoDrivers = ["nvidia"];
   hardware.graphics.enable = true;
   hardware.nvidia.open = true;
+  
+  # ollama
+  services.ollama = {
+    enable = true;
+#   acceleration = "cuda";
+  };
 
   # Optionally, you may need to select the appropriate driver version for your specific GPU.
   hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable;
@@ -154,6 +160,22 @@
     # Bus ID of the Intel GPU. You can find it using lspci, either under 3D or VGA
     intelBusId = "PCI:00:02:0";
   };
+    
+  hardware.bluetooth.enable = true; # Включает поддержку Bluetooth
+  hardware.bluetooth.powerOnBoot = true; # Включает Bluetooth при загрузке
+  
+  services.blueman.enable = true;
+
+#    acceleration = "cuda";
+#    loadModels = [ "llama3.2:3b" "deepseek-r1:1.5b" "deepseek-r1:671b" "starcoder:15b" "qwen2-math:72b" "wizard-math:70b" ];
+#  };
+
+  hardware = {
+    nvidia = {
+      enable = true;
+      version = "576.80.05"; # Replace with the latest stable version
+    };
+  };
 
   system.extraDependencies = with pkgs; [
     glm
@@ -165,6 +187,10 @@
   ];
 
   environment.systemPackages = with pkgs; [
+    (pkgs.nvidia-cuda-toolkit-12.2.0)
+    (pkgs.ollama.override { 
+      acceleration = "cuda";
+    })
     arduino-ide
     arduino-core
 
@@ -187,6 +213,8 @@
     qpwgraph
     vscode
     blender
+
+#   ollama-cuda
 
     python3Full
     python3
